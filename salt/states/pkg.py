@@ -1269,6 +1269,16 @@ def installed(
 
         .. versionadded:: 2015.8.9
 
+    :param str variants:
+        The (macports) variants of the package to be installed.
+
+        .. code-block:: yaml
+
+            nginx:
+              pkg.installed:
+                - version: 1.13.8
+                - variants: +http_push+lua+stream-mp4
+
     |
 
     **MULTIPLE PACKAGE INSTALLATION OPTIONS: (not supported in pkgng)**
@@ -1468,6 +1478,11 @@ def installed(
                 'changes': {},
                 'result': True,
                 'comment': 'No packages to install provided'}
+
+    if __grains__['os'] == 'MacOS' and 'variants' in kwargs:
+        variants = kwargs['variants']
+    else:
+        variants = None
 
     # If just a name (and optionally a version) is passed, just pack them into
     # the pkgs argument.
